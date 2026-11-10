@@ -1,0 +1,79 @@
+# DESIGN FRAGMENTS ONLY. No production image, IAM, TLS, credentials,
+# authorization endpoints, egress permissions or bank deployment is supplied.
+# Default-deny networking intentionally makes this unusable without approved
+# service-specific ingress/egress. A namespace label is not workload identity.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cib-agent-authority-example
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: authority-service-example
+  namespace: cib-agent-authority-example
+automountServiceAccountToken: false
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: cib-agent-authority-example
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+  ingress: []
+  egress: []
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authority-service-example
+  namespace: cib-agent-authority-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: authority-service-example
+  template:
+    metadata:
+      labels:
+        app: authority-service-example
+    spec:
+      serviceAccountName: authority-service-example
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: authority
+          # Intentionally non-runnable placeholder; production admission must
+          # validate the actual digest, provenance and signer/builder identity.
+          image: example.invalid/cib/authority:UNAPPROVED-PLACEHOLDER
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: '1'
+              memory: 512Mi
+          volumeMounts:
+            - name: scratch
+              mountPath: /tmp
+      volumes:
+        - name: scratch
+          emptyDir:
+            medium: Memory
+            sizeLimit: 32Mi

@@ -1,0 +1,12 @@
+{
+  "operation": "payments.internal-transfer",
+  "debit_account": "OPS_SGD",
+  "credit_account": "PAYROLL_SGD",
+  "amount_minor": 250000,
+  "currency": "SGD",
+  "value_date": "2026-11-09",
+  "purpose": "payroll",
+  "mandate_id": "mandate-1",
+  "idempotency_key": "payment-1",
+  "schema_version": "cib.action.v1"
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cib:local-reference:authority-event:v1",
+  "title": "CIB local control evidence envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specversion",
+    "id",
+    "source",
+    "type",
+    "time",
+    "datacontenttype",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "source": {
+      "type": "string",
+      "format": "uri"
+    },
+    "type": {
+      "const": "cib.authority.control.v1"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datacontenttype": {
+      "const": "application/json"
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "event",
+        "tenant"
+      ],
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "tenant": {
+          "type": "string"
+        }
+      },
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "access_token"
+            ]
+          },
+          {
+            "required": [
+              "grant_token"
+            ]
+          },
+          {
+            "required": [
+              "prompt"
+            ]
+          },
+          {
+            "required": [
+              "raw_output"
+            ]
+          },
+          {
+            "required": [
+              "secret"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "description": "Local evidence fields are intentionally references/hashes. Production defines a fuller governed bank evidence schema and independent protected record custody."
+}

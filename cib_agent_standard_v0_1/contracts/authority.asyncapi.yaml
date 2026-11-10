@@ -1,0 +1,35 @@
+asyncapi: 3.0.0
+info:
+  title: CIB authority evidence export — proposed contract
+  version: 0.1.0
+  description: >-
+    Design contract only. The local pack writes an audit outbox but does not
+    deploy a broker, exporter, TLS or consumer. Durable financial evidence
+    must not be sampled. Consumer deduplication uses the stable event ID.
+defaultContentType: application/cloudevents+json
+channels:
+  authorityEvidence:
+    address: cib.authority.evidence.v1
+    messages:
+      controlEvent:
+        $ref: '#/components/messages/ControlEvent'
+operations:
+  publishControlEvidence:
+    action: send
+    channel:
+      $ref: '#/channels/authorityEvidence'
+    messages:
+      - $ref: '#/channels/authorityEvidence/messages/controlEvent'
+components:
+  messages:
+    ControlEvent:
+      name: ControlEvent
+      title: CIB authority control event
+      contentType: application/cloudevents+json
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          $ref: './authority-event.schema.json'
+# Production adds the actual approved Kafka/Solace/AMQP bindings, authenticated
+# publishers/consumers, tenant/topic authorization, retention and retry/dead
+# letter policies. No public broker or reusable token appears in this contract.

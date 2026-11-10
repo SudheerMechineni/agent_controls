@@ -1,0 +1,26 @@
+schema_version: cib.agent-release.v1
+status: illustrative-unapproved-manifest
+service_id: cib.agentic-treasury.internal-transfer
+release_id: candidate-0.1
+code_image_digest: resolve-from-approved-build-provenance
+builder_and_signer_pair: require-approved-builder-and-signer
+model_routes:
+  - provider_ref: bank-approved-provider-reference
+    model_version: explicit-approved-version
+    region: SG
+    fallback: only-an-independently-approved-route
+prompt_bundle_digest: resolve-from-protected-repository
+retrieval_profile_digest: resolve-from-catalogue-and-index-release
+tool_manifest_digest: resolve-from-approved-tool-registry
+policy_bundle_digest: resolve-from-approved-policy-service
+memory_profile_digest: resolve-from-steward-approved-profile
+evaluation_corpus_digest: resolve-from-evaluation-registry
+evidence_schema_version: cib.authority.control.v1
+consequence_tier: C3
+autonomy_level: A1
+maximum_authority_ref: approved-service-profile-reference
+approval_record_ref: pending
+sbom_ref: pending
+provenance_ref: pending
+independent_security_and_risk_review: pending
+comment: Do not replace placeholders with arbitrary tags and declare this an attested release.

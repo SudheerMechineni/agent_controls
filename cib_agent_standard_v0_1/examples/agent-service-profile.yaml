@@ -1,0 +1,75 @@
+schema_version: cib.agent-service.v1
+status: recommended-example-not-approved
+service_id: cib.agentic-treasury.internal-transfer
+business_purpose: Prepare and release a bounded internal transfer under a corporate mandate
+business_owner_role: CIB Cash Product Owner
+technology_owner_role: CIB Cash Technology Service Owner
+consequence_tier: C3
+autonomy_level: A1
+production_authority: disabled-until-bank-approval
+legal_entity_ref: synthetic-entity-SG
+corporate_party_ref: CORP_A
+regions:
+  inference: [SG]
+  retrieval: [SG]
+  memory: [SG]
+  workflow_history: [SG]
+  evidence: [SG]
+  provider_support_access: requires-explicit-review
+data_classes: [confidential-client, financial-instruction]
+tools:
+  - operation_id: accounts.balance
+    effect: read
+    authority: current-source-entitlement-and-task-purpose
+  - operation_id: payments.internal-transfer.prepare
+    effect: draft
+    authority: corporate-mandate-and-account-entitlement
+release_control:
+  operation_id: payments.internal-transfer
+  model_visible: false
+  mandate_ref: mandate-1
+  human_control: independent-checker-bound-to-exact-instruction
+  final_acceptance_owner: cash-domain
+prohibited_actions:
+  - change-beneficiary
+  - raise-limits
+  - modify-screening-policy
+  - grant-self-entitlements
+  - direct-ledger-write
+  - direct-signing-or-key-export
+  - arbitrary-network-or-shell-tool
+  - self-reset-kill-switch
+planning_budget:
+  maximum_steps: 12
+  maximum_tool_calls: 25
+  interactive_deadline_seconds: 120
+  maximum_delegation_depth: 0
+credentials:
+  access_token_max_seconds: 300
+  exact_action_grant_max_seconds: 30
+  secrets_in_model_context: forbidden
+  sender_constraint: production-mtls-or-dpop-profile-required
+evidence:
+  financial_acceptance_sampling: forbidden
+  generic_prompt_logging: disabled
+  retention_policy_ref: to-be-assigned-by-records-owner
+  independent_protected_store: required-before-production
+resilience:
+  manual_fallback_ref: approved-cash-operations-runbook
+  unknown_outcome: query-and-reconcile-original-operation-key
+  duplicate_effect_tolerance: zero-for-this-operation
+  kill_scope: [task, mandate, agent, tool, provider, product]
+  reenable: independent-human-review
+dependencies:
+  - enterprise-iam-and-workload-identity
+  - entitlements-and-mandate-service
+  - authority-pdp-and-approval-service
+  - cash-domain-and-ledger
+  - screening-fraud-and-liquidity
+  - durable-evidence-and-incident-control
+acceptance:
+  security_review: pending
+  product_risk_review: pending
+  compliance_applicability: pending
+  operations_and_recovery: pending
+  vendor_and_region_assurance: pending

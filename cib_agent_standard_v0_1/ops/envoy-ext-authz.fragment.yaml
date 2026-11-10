@@ -1,0 +1,25 @@
+# DESIGN FRAGMENT ONLY; not a complete Envoy bootstrap or tested deployment.
+# Validate against the bank's pinned Envoy release and ext-authz contract.
+# Strip spoofable identity headers and authenticate before this filter.
+# No later filter/route mutation may bypass or change the protected target.
+http_filters:
+  - name: envoy.filters.http.ext_authz
+    typed_config:
+      '@type': type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+      grpc_service:
+        envoy_grpc:
+          cluster_name: bank-agent-authority-ext-authz
+        timeout: 0.25s
+      failure_mode_allow: false
+      include_peer_certificate: true
+      clear_route_cache: false
+      with_request_body:
+        max_request_bytes: 65536
+        allow_partial_message: false
+        pack_as_bytes: true
+  - name: envoy.filters.http.router
+    typed_config:
+      '@type': type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+# TLS/mTLS cluster configuration, JWKS/issuer trust, sensitive-body handling,
+# endpoint policy, response metadata validation, rate limits and the receiving
+# domain's exact-action/live-state check must be supplied separately.

@@ -1,0 +1,28 @@
+{
+  "data": {
+    "action_hash": "220792642b8a27ec39e5107dfa753538e2c5b4eefac2b30672ece1858184bf7d",
+    "agent": "treasury-agent",
+    "event": "action.executed",
+    "grant_jti": "00fb4e9c-dd10-4ed5-9f95-74d6b872fda1",
+    "principal": "maker",
+    "result_ref": "611cdf33-a9ac-4060-9cb0-36e1354defe9",
+    "snapshot": {
+      "agent_artifact_digest": "sha256:demo-release-approved",
+      "agent_epoch": 1,
+      "credit_version": 1,
+      "debit_version": 1,
+      "mandate_epoch": 1,
+      "policy_version": "cib-local-0.1",
+      "principal_epoch": 1
+    },
+    "status": "BOOKED",
+    "task": "task-1",
+    "tenant": "CORP_A"
+  },
+  "datacontenttype": "application/json",
+  "id": "91472f7d-dc46-46ab-844d-3c0348b9766b",
+  "source": "urn:cib:local-reference",
+  "specversion": "1.0",
+  "time": "2026-11-09T00:00:00+00:00",
+  "type": "cib.authority.control.v1"
+}

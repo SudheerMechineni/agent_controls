@@ -1,0 +1,24 @@
+schema_version: cib.mandate.v1
+status: synthetic-example
+mandate_id: mandate-1
+corporate_party_ref: CORP_A
+legal_entity_ref: synthetic-entity-SG
+principal_ref: maker
+agent_ref: treasury-agent
+task_ref: task-1
+purpose: payroll
+operations: [accounts.balance, payments.internal-transfer]
+source_account: OPS_SGD
+approved_beneficiary: PAYROLL_SGD
+currency: SGD
+scale: 2
+per_action_limit_minor: 1000000
+lifetime_of_mandate_limit_minor: 1500000
+daily_limits: not-implemented-in-local-reference
+delegation: forbidden
+release_rule: independent-entitled-checker-on-exact-action
+expiry: generated-at-runtime-plus-600-seconds
+revocation_epoch: 1
+grant_max_seconds: 30
+approval_max_seconds: 120
+comment: Numeric values demonstrate controls; they are not proposed client limits or legal mandates.

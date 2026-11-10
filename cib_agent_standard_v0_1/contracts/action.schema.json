@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cib:local-reference:action:v1",
+  "title": "CIB local reference action \u2014 SGD only",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "operation",
+    "debit_account",
+    "credit_account",
+    "amount_minor",
+    "currency",
+    "value_date",
+    "purpose",
+    "mandate_id",
+    "idempotency_key"
+  ],
+  "properties": {
+    "operation": {
+      "enum": [
+        "accounts.balance",
+        "payments.internal-transfer"
+      ]
+    },
+    "debit_account": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.:-]{1,96}$",
+      "maxLength": 96
+    },
+    "credit_account": {
+      "type": "string",
+      "pattern": "^$|^[A-Za-z0-9_.:-]{1,96}$",
+      "maxLength": 96
+    },
+    "amount_minor": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000000000
+    },
+    "currency": {
+      "const": "SGD"
+    },
+    "value_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "purpose": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.:-]{1,96}$",
+      "maxLength": 96
+    },
+    "mandate_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.:-]{1,96}$",
+      "maxLength": 96
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.:-]{1,96}$",
+      "maxLength": 96
+    },
+    "schema_version": {
+      "const": "cib.action.v1",
+      "default": "cib.action.v1"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "accounts.balance"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "amount_minor": {
+            "const": 0
+          },
+          "credit_account": {
+            "const": ""
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "payments.internal-transfer"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "amount_minor": {
+            "minimum": 1
+          },
+          "credit_account": {
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ],
+  "description": "Domain additionally requires different debit/credit accounts, current business date, registered resources, live mandate/entitlements, screening, approval, funds and limits. Schema validity alone never establishes authority."
+}
